@@ -1,5 +1,7 @@
 from flask import Flask, request
 import json
+import scanfaces
+
 try:
     from urllib.parse import parse_qs
 except ImportError:
@@ -9,8 +11,10 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/recognize', methods=['POST'])
 def recognize():
-   # print(parse_qs((request.get_data())))
    if request.method == 'POST':
+       image_base64 = request.json['image']
+       print(image_base64)
+       scanfaces.get_info(image_base64, '/home/hkayaroh/attendance/res')
        return "true", 200
    else:
        return "false", 417

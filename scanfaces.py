@@ -15,7 +15,7 @@ def get_faces(base64_string):
     face_cascade = cv2.CascadeClassifier('/usr/share/opencv/haarcascades/haarcascade_frontalface_default.xml')
     eye_cascade = cv2.CascadeClassifier('/usr/share/opencv/haarcascades/haarcascade_eye.xml')
     img = readb64(base64_string)
-    print(img)
+    #print(img)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.2, 5)
 
@@ -30,37 +30,6 @@ def get_faces(base64_string):
             face_images.append(roi_color)
 
     return face_images
-
-
-def scan_images(root_dir, output_dir):
-    image_extensions = ["jpg", "png"]
-    num_faces = 0
-    num_images = 0
-
-    print("Images directory {}".format(root_dir))
-    print("Output directory {}".format(output_dir))
-    print("-" * 20)
-
-    for dir_name, subdir_list, file_list in os.walk(root_dir):
-        print('Scanning directory: %s' % dir_name)
-        for filename in file_list:
-            extension = os.path.splitext(filename)[1][1:]
-            if extension in image_extensions:
-                faces = get_faces(os.path.join(dir_name, filename))
-                num_images += 1
-
-                for face in faces:
-                    face_filename = os.path.join(output_dir, "face{}.png".format(num_faces))
-                
-                    print(type(face))
-                    print(face)
-                    cv2.imwrite(face_filename, face)
-                    print("\tWrote {} extracted from {}".format(face_filename, filename))
-                    num_faces += 1
-
-    print("-" * 20)
-    print("Total number of images: {}".format(num_images))
-    print("Total number of faces: {}".format(num_faces))
 
 def get_info(img_base64, outputdir):
     image_name = '/home/hkayaroh/attendance/groupimg/IMG_0092.jpg'
