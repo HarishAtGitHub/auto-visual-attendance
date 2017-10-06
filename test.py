@@ -11,4 +11,4 @@ with open(file_name, 'rb') as img:
     request_payload = {'image' : img_base64.decode('utf-8')} 
     headers = {'Content-Type' : 'application/json'}
     response = requests.post(url, data=json.dumps(request_payload), headers=headers)
-    print(response)
+    print(response.json())
