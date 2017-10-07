@@ -34,8 +34,11 @@ def get_faces(base64_string):
     face_images = []
 
     for (x, y, w, h) in faces:
-        roi_gray = gray[y:y + h, x:x + w]
-        roi_color = img[y:y + h, x:x + w]
+        print('************** dimensions *************')
+        print(x,y,w,h)
+        extra = 70
+        roi_gray = gray[y - extra:y + h + extra, x - extra:x + w + extra]
+        roi_color = img[y - extra:y + h + extra, x - extra:x + w + extra]
 
         eyes = eye_cascade.detectMultiScale(roi_gray)
         if len(eyes) >= 1:
@@ -44,11 +47,11 @@ def get_faces(base64_string):
     return face_images
 
 def get_info(img_base64):
-    image_name = '/home/hkayaroh/attendance/groupimg/IMG_0092.jpg'
+    '''image_name = '/home/hkayaroh/attendance/groupimg/IMG_0092.jpg'
     with open(image_name, 'rb') as img:
         img_binary = img.read()
         import base64
-        img_base64 = base64.b64encode(img_binary)
+        img_base64 = base64.b64encode(img_binary)'''
     faces = get_faces(img_base64)
     num_faces = 0
     import os
