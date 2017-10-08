@@ -33,6 +33,7 @@
         <div class="col-lg-4">
             <ul class="rounded-list">
             </ul>
+            <button class="take_attendance" > TAKE ATTENDANCE </button>
             <button class="analytics" > CROWD ANALYTICS </button>
         </div>
     </div>
@@ -50,7 +51,11 @@
     function decode_utf8(s) {
         return decodeURIComponent(escape(s));
     }
-    
+   
+    $('.take_attendance').click(function() {
+        takePicture();
+        get_info();
+    }); 
     // https://www.w3resource.com/javascript-exercises/javascript-array-exercise-23.php
     function differenceOf2Arrays (array1, array2) {
 	var temp = [];
@@ -104,9 +109,10 @@
                           personData = info["info"]["response"]["docs"][0];
                           asurite_id = personData["asuriteId"];
                           name = personData["displayName"];
+                          emailAddress = personData["emailAddress"];
                           profile_url = "https://isearch.asu.edu/profile/" + personData["eid"];
                           new_set_of_people.push(asurite_id);
-                          li_tags.push('<li><a target="_blank" id="' + asurite_id + '" href="' + profile_url + '" title="' + asurite_id + '">' + name + '</a></li>');
+                          li_tags.push('<li><a target="_blank" id="' + asurite_id + '" href="' + profile_url + '" title=" emailAddress :' + emailAddress + '">' + name + ' - ' + asurite_id + '</a></li>');
                       }
                           
                   }
@@ -147,14 +153,14 @@
             .then(function(stream) {
                 video.srcObject = stream;
                 // video.addEventListener('click', takePicture);
-                setInterval(takePicture, 3000);
+                //setInterval(takePicture, 3000);
             })
             .catch(function(error) {
                 
                 console.log(error);
             });
     }
-    setInterval(get_info, 10000);
+    //setInterval(get_info, 10000);
     
 </script>    
 
