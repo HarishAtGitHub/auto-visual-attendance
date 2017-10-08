@@ -1,0 +1,167 @@
+<html>
+
+<head>
+  <title>Game day</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" type="text/css" rel="stylesheet"/>
+  <link href="css/map.css?id=7" type="text/css" rel="stylesheet"/>
+  <link href="css/dark.css?id=7" type="text/css" rel="stylesheet"/>
+  <link href="css/style.css?id=18" type="text/css" rel="stylesheet"/>
+  <link href="css/bootstrap-slider.css" type="text/css" rel="stylesheet"/>
+  <link href="css/rzslider.css" type="text/css" rel="stylesheet"/>
+  <link href="css/confetti.css" type="text/css" rel="stylesheet"/>
+</head>
+<style>
+    body { 
+        background: black
+    }
+</style>
+
+<body>
+    <div class="section bg-lighter border-bottom" id="header" ng-controller="ConfettiCtrl">
+        <div class="row">
+            <div class="sundevils col-lg-12 text-center">
+                 Welcome to the ASU Auto Visual Attendance!
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- camera region -->
+        <div class="col-lg-8">
+            <video autoplay id="camera" width="100%" height="85%"></video>
+        </div>
+        <div class="col-lg-4">
+            <ul class="rounded-list">
+            </ul>
+            <button class="analytics" > CROWD ANALYTICS </button>
+        </div>
+    </div>
+
+
+<!------------******************** CODE STARTS ************************---------------->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jcanvas/20.1.2/jcanvas.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="spin.min.js"></script>
+<script>
+    var video = document.querySelector('video');
+    var image_base64_global = '';
+    var people_identified = [];
+    function decode_utf8(s) {
+        return decodeURIComponent(escape(s));
+    }
+    
+    // https://www.w3resource.com/javascript-exercises/javascript-array-exercise-23.php
+    function differenceOf2Arrays (array1, array2) {
+	var temp = [];
+	array1 = array1.toString().split(',').map(Number);
+	array2 = array2.toString().split(',').map(Number);
+
+	for (var i in array1) {
+	if(array2.indexOf(array1[i]) === -1) temp.push(array1[i]);
+	}
+	for(i in array2) {
+	if(array1.indexOf(array2[i]) === -1) temp.push(array2[i]);
+	}
+	return temp.sort((a,b) => a-b);
+    }
+
+    // to take picture
+    function takePicture() {
+        console.log("called");
+        // get video width and height
+        var video_width = video.offsetWidth;
+        var video_height = video.offsetHeight;
+        // set canvas and hence the images width and height same as video's
+        canvas = document.createElement('canvas');
+        canvas.width = video_width;
+        canvas.height = video_height;
+        dx = 0 ; // The X coordinate in the destination canvas at which to place the top-left corner of the source image.
+        dy = 0 ; // The Y coordinate in the destination canvas at which to place the top-left corner of the source image.
+        canvas.getContext('2d').drawImage(video, dx, dy, canvas.width, canvas.height); // cannot find jquery canvas interface so did it in plain js
+        image_base64_global = canvas.toDataURL("image/jpeg");
+            
+    }
+
+    function get_info() {
+        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$4');
+        //console.log(image_base64_global);
+        $.ajax
+            ({
+              type: "POST",
+              url: "https://ec2-35-167-16-218.us-west-2.compute.amazonaws.com/vizattendance/recognize",
+              dataType: "json",
+              headers: {"Content-Type" : "application/json"},
+              data: JSON.stringify({"image" : image_base64_global.replace("data:image/jpeg;base64,", "")}),
+              success: function(data, textStatus, jqXHR) {
+                  for(var i in data) {
+                      var li_tags = [];
+                      var new_set_of_people = []
+                      var info = data[i];
+                      error_key = "errorMessage";
+                      if((error_key in info && info["errorMessage"] != "An error occurred (InvalidParameterException) when calling the SearchFacesByImage operation: There are no faces in the image. Should be at least 1.") || (info["info"] == null)) {
+                      } else {
+                          personData = info["info"]["response"]["docs"][0];
+                          asurite_id = personData["asuriteId"];
+                          name = personData["displayName"];
+                          profile_url = "https://isearch.asu.edu/profile/" + personData["eid"];
+                          new_set_of_people.push(asurite_id);
+                          li_tags.push('<li><a target="_blank" href="' + profile_url + '" title="' + asurite_id + '">' + name + '</a></li>');
+                      }
+                          
+                  }
+                  $('ul').empty();
+                  for (var i in li_tags) {
+                      li_tag = li_tags[i];
+                      $('ul').append(li_tag); 
+                  }
+                  /*
+                  for(var i in data) {
+                      var info = data[i];
+                      error_key = "errorMessage";
+                      if(error_key in info && info["errorMessage"] != "An error occurred (InvalidParameterException) when calling the SearchFacesByImage operation: There are no faces in the image. Should be at least 1.") {
+                           name = "";
+                           //jQuery("img#celebrity").attr("src", "https://metrouk2.files.wordpress.com/2016/04/ac_silhouette_comp.jpg");
+                      } else if(info["info"] == null) {
+                           reset_info();
+                           console.log("Sorry Could not get fetch information about you");
+                           name = "";
+                           //jQuery("img#celebrity").attr("src", "https://metrouk2.files.wordpress.com/2016/04/ac_silhouette_comp.jpg");
+                      } else {
+                           console.log(info);
+                           personData = info["info"]["response"]["docs"][0];
+                           jQuery("h3#name_of_person").text(personData["displayName"]);
+                           jQuery("h4#title_of_person").text(personData["workingTitle"]);
+                           jQuery("h4#department_of_person").text(personData["primaryDepartment"]);
+                       
+                      }
+                  }*/
+              },
+              error: function(jqXHR, textStatus, errorThrown ) {
+                  console.log(errorThrown);
+              }
+            });
+    }
+    if (navigator.mediaDevices) {
+        navigator.mediaDevices.getUserMedia({video: true})
+            .then(function(stream) {
+                video.srcObject = stream;
+                // video.addEventListener('click', takePicture);
+                setInterval(takePicture, 3000);
+            })
+            .catch(function(error) {
+                
+                console.log(error);
+            });
+    }
+    setInterval(get_info, 3500);
+    
+</script>    
+
+<script>
+
+</script>
+<!------------*********************** CODE ENDS *********************************---------------->
+
+</body>
+</html>

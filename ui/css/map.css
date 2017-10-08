@@ -1,0 +1,168 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.angular-google-map-container {
+    width: 100%;
+    height: 176px !important
+}
+.btn-group {
+    display: none !important;
+}
+/* fix for Twitter Bootstrap handling of responsive images */
+.angular-google-map img {
+    max-width: none;
+
+}
+
+.angular-google-map {
+  margin: 0 -15px;
+  margin-top: -20px;
+}
+
+.shrink {
+    font-size: 8;
+}
+
+.true:hover {
+    background-color: lightgreen;
+}
+
+.false:hover {
+    background-color: lightpink;
+}
+
+.marker-labels {
+    color: red;
+    background-color: white;
+    font-family: "Lucida Grande", "Arial", sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid black;
+    white-space: nowrap;
+}
+
+/** FIX for Bootstrap and Google Maps Info window styes problem **/
+img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
+  max-width: none;
+}
+
+
+/* uncomment this if you are using the <google-map> element instead of a div
+.angular-google-map {
+  display: block;
+  }*/
+
+.custom-info-window{
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 20px;
+    /*border: 1px solid white;*/
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    width: 200px;
+    margin-top: 15px;
+    margin-left: -130px;
+}
+.custom-info-window a{
+    color: white;
+    text-decoration: underline;
+}
+.custom-info-window:after
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 15px 15px;
+    border-color: rgba(0,0,0,0.5) transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: -15px;
+    left: 118px;
+}
+html, body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px
+}
+
+.pac-controls {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px !important;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input {
+  background-color: #fff;
+  padding: 0 11px 0 13px;
+  width: 400px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  text-overflow: ellipsis;
+  margin-left:10px
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+  margin-left: -1px;
+  padding-left: 14px;  /* Regular padding-left + 1. */
+  width: 401px;
+  margin-left:10px
+}
+
+.pac-container {
+  font-family: 'Open Sans', sans-serif;
+}
+
+#type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.angular-google-map-container {
+    width: 100%;
+    height: 600px;
+}
+
+/* fix for Twitter Bootstrap handling of responsive images */
+.angular-google-map img {
+    max-width: inherit;
+}
+#map .btn-group {
+  margin:10px 10px 0 0;
+}
+#pac-input{
+  margin-left:-2px;
+}
+@media screen and (max-width:565px){
+  #pac-input{
+    width:300px;
+  }
+}
+@media screen and (max-width:450px){
+  #pac-input{
+    width:250px;
+  }
+}
+@media screen and (max-width: 1200px){
+  #map .btn-group {
+    margin-top: 46px;
+    position: relative !important;
+    margin-left: 10px;
+  }
+}

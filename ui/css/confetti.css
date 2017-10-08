@@ -1,0 +1,50 @@
+.confetti-text {
+  -webkit-transition: all 200ms ease;
+  -moz-transition: all 200ms ease;
+  -ms-transition: all 200ms ease;
+  -o-transition: all 200ms ease;
+  transition: all 200ms ease;
+  font-size: 3em;
+  position: absolute;
+  top: 130%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  z-index: 350;
+  font-family: "Sun Devil Bold","Roboto","Arial";
+  color: rgba(255, 198, 39, 1);
+  -webkit-text-stroke-width: 8px;
+  -webkit-text-stroke-color: #fff;
+}
+
+.confetti-visible {
+  animation-duration: 5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  0% {
+    top: 130%;
+    font-size: 10em;
+    opacity: 1;
+  }
+
+  5% {
+    top: 37%;
+    font-size: 10em;
+    opacity: 1;
+  }
+
+  98% {
+    top: 33%;
+    font-size: 10.2em;
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    font-size: 6em;
+    opacity: 0;
+  }
+}
