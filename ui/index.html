@@ -106,7 +106,7 @@
                           name = personData["displayName"];
                           profile_url = "https://isearch.asu.edu/profile/" + personData["eid"];
                           new_set_of_people.push(asurite_id);
-                          li_tags.push('<li><a target="_blank" href="' + profile_url + '" title="' + asurite_id + '">' + name + '</a></li>');
+                          li_tags.push('<li><a target="_blank" id="' + asurite_id + '" href="' + profile_url + '" title="' + asurite_id + '">' + name + '</a></li>');
                       }
                           
                   }
@@ -154,7 +154,7 @@
                 console.log(error);
             });
     }
-    setInterval(get_info, 3500);
+    setInterval(get_info, 10000);
     
 </script>    
 
