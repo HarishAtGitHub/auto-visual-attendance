@@ -1,16 +1,16 @@
-.analytics {
+button {
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    height:50px;
+    //padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    //display: inline-block;
     font-size: 16px;
     position: relative;
-    left:25%;
+    //left:25%;
 }
-
 ul {
     //counter-reset: li;
     height: 75%;
@@ -24,7 +24,7 @@ ul {
     display: block;
     padding: .4em .4em .4em 2em;
     *padding: .4em;
-    margin: .5em 0;
+    margin: .5em .5em;
     background: #ddd;
     color: #444;
     text-decoration: none;

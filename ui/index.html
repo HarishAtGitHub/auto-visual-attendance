@@ -30,11 +30,16 @@
         <div class="col-lg-8">
             <video autoplay id="camera" width="100%" height="85%"></video>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4" style="border-left: thick solid #242733" >
+            <div style="text-align:center">
+                <span><b> ATTENDEES: </b></span>
+            </div>
             <ul class="rounded-list">
             </ul>
-            <button class="take_attendance" > TAKE ATTENDANCE </button>
-            <button class="analytics" > CROWD ANALYTICS </button>
+            <div style="text-align:center">
+                <button class="take_attendance" > TAKE ATTENDANCE </button>
+                <button class="analytics" > CROWD ANALYTICS </button>
+            </div>
         </div>
     </div>
 
@@ -89,8 +94,6 @@
     }
 
     function get_info() {
-        //console.log('$$$$$$$$$$$$$$$$$$$$$$$$4');
-        //console.log(image_base64_global);
         $.ajax
             ({
               type: "POST",
