@@ -34,8 +34,8 @@
             <div style="text-align:center">
                 <span><b> ATTENDEES: </b></span>
             </div>
-            <ul class="rounded-list">
-            </ul>
+            <ol class="rounded-list">
+            </ol>
             <div style="text-align:center">
                 <button class="take_attendance" > TAKE ATTENDANCE </button>
                 <button class="analytics" > CROWD ANALYTICS </button>
@@ -119,10 +119,10 @@
                       }
                           
                   }
-                  $('ul').empty();
+                  $('ol').empty();
                   for (var i in li_tags) {
                       li_tag = li_tags[i];
-                      $('ul').append(li_tag); 
+                      $('ol').append(li_tag); 
                   }
                   /*
                   for(var i in data) {

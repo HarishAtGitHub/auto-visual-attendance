@@ -11,8 +11,8 @@ button {
     position: relative;
     //left:25%;
 }
-ul {
-    //counter-reset: li;
+ol {
+    counter-reset: li;
     height: 75%;
     overflow:hidden; 
     overflow-y:scroll;
@@ -39,10 +39,10 @@ ul {
 .rounded-list a:hover:before{
     transform: rotate(360deg);  
 }
-/*
+
 .rounded-list a:before{
-    //counter-increment: li;
-    //content: counter(li);
+    counter-increment: li;
+    content: counter(li);
     position: absolute; 
     left: -2.2em;
     top: 60%;
@@ -56,7 +56,7 @@ ul {
     font-weight: bold;
     border-radius: 2em;
     transition: all .3s ease-out;
-}*/
+}
 
 @font-face {
   font-family: "Sun Devil Bold";
