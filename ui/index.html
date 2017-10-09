@@ -18,6 +18,46 @@
 </style>
 
 <body>
+    <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">CROWD ANALYTICS</h4>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs">
+            <li id="department_spread_tab" class="active"><a data-toggle="tab" href="#department_spread">Department Distribution</a></li>
+            <li id="student_staff_tab"><a data-toggle="tab" href="#student_staff">Student and Staff Distribution</a></li>
+            <li id="campus_spread_tab"><a data-toggle="tab" href="#campus_spread">Campus Distribution</a></li>
+            <li id="attention_tab"><a data-toggle="tab" href="#attention">Attention Levels</a></li>
+          </ul>
+          <div class="tab-content">
+	    <div id="department_spread" class="tab-pane fade in active">
+              <!-- example : http://jsfiddle.net/b6v3w0s2/2/ -->
+              <div id="department_spread_chart" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+	    </div>
+	    <div id="student_staff" class="tab-pane fade">
+              <!-- example:  http://jsfiddle.net/4ng0wzz1/5/ -->
+	      <div id="student_staff_chart" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+            </div>
+	    <div id="campus_spread" class="tab-pane fade">
+              <!-- http://jsfiddle.net/4wmxffee/2/ -->
+              <div id="campus_spread_chart" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+	    </div>
+	    <div id="attention" class="tab-pane fade">
+	      <h4>Distribution of crowd by Attention levels</h4>
+	      <p>TODO : To compute how many are happy, sad , restless in the crowd. </p>
+	    </div>
+	  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="section bg-lighter border-bottom" id="header" ng-controller="ConfettiCtrl">
         <div class="row">
             <div class="sundevils col-lg-12 text-center">
@@ -38,7 +78,7 @@
             </ol>
             <div style="text-align:center">
                 <button class="take_attendance" > TAKE ATTENDANCE </button>
-                <button class="analytics" > CROWD ANALYTICS </button>
+                <button class="analytics" data-toggle="modal" data-target="#myModal"> CROWD ANALYTICS </button>
             </div>
         </div>
     </div>
@@ -49,10 +89,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jcanvas/20.1.2/jcanvas.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="spin.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="js/charts.js"></script>
 <script>
     var video = document.querySelector('video');
     var image_base64_global = '';
     var people_identified = [];
+    var chart_data =[];
     function decode_utf8(s) {
         return decodeURIComponent(escape(s));
     }
@@ -102,6 +146,7 @@
               headers: {"Content-Type" : "application/json"},
               data: JSON.stringify({"image" : image_base64_global.replace("data:image/jpeg;base64,", "")}),
               success: function(data, textStatus, jqXHR) {
+                  chart_data=[];
                   var new_set_of_people = []
                   var li_tags = [];
                   var unidentified = 0;
@@ -116,7 +161,8 @@
                           personData = info["info"]["response"]["docs"][0];
                           if(personData === undefined) {
                               unidentified = unidentified + 1;
-                          } else {   
+                          } else {
+                              chart_data.push(personData);
                               asurite_id = personData["asuriteId"];
                               name = personData["displayName"];
                               emailAddress = personData["emailAddress"];
@@ -135,27 +181,6 @@
                   if(unidentified > 0) {
                       $('ol').append('<li><a target="_blank"> UNIDENTIFIED : ' + unidentified + ' </a></li>');
                   }
-                  /*
-                  for(var i in data) {
-                      var info = data[i];
-                      error_key = "errorMessage";
-                      if(error_key in info && info["errorMessage"] != "An error occurred (InvalidParameterException) when calling the SearchFacesByImage operation: There are no faces in the image. Should be at least 1.") {
-                           name = "";
-                           //jQuery("img#celebrity").attr("src", "https://metrouk2.files.wordpress.com/2016/04/ac_silhouette_comp.jpg");
-                      } else if(info["info"] == null) {
-                           reset_info();
-                           console.log("Sorry Could not get fetch information about you");
-                           name = "";
-                           //jQuery("img#celebrity").attr("src", "https://metrouk2.files.wordpress.com/2016/04/ac_silhouette_comp.jpg");
-                      } else {
-                           console.log(info);
-                           personData = info["info"]["response"]["docs"][0];
-                           jQuery("h3#name_of_person").text(personData["displayName"]);
-                           jQuery("h4#title_of_person").text(personData["workingTitle"]);
-                           jQuery("h4#department_of_person").text(personData["primaryDepartment"]);
-                       
-                      }
-                  }*/
               },
               error: function(jqXHR, textStatus, errorThrown ) {
                   console.log(errorThrown);
@@ -175,7 +200,22 @@
             });
     }
     //setInterval(get_info, 10000);
-    
+    $('button.analytics').click(function() {
+        // always start with the first tab
+        $('li#department_spread_tab').click();
+    });
+    $('li#department_spread_tab').click(function () {
+        console.log("coming in department spread");
+        draw_department_spread(chart_data);
+    }); 
+    $('li#student_staff_tab').click(function () {
+        console.log("coming in student staff spread");
+        draw_student_staff(chart_data);
+    }); 
+    $('li#campus_spread_tab').click(function () {
+        console.log("coming in campus spread ");
+        draw_campus_spread(chart_data);
+    }); 
 </script>    
 
 <script>
