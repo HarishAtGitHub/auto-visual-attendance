@@ -102,20 +102,28 @@
               headers: {"Content-Type" : "application/json"},
               data: JSON.stringify({"image" : image_base64_global.replace("data:image/jpeg;base64,", "")}),
               success: function(data, textStatus, jqXHR) {
+                  var new_set_of_people = []
+                  var li_tags = [];
+                  var unidentified = 0;
                   for(var i in data) {
-                      var li_tags = [];
-                      var new_set_of_people = []
                       var info = data[i];
+                      console.log(info);
                       error_key = "errorMessage";
-                      if((error_key in info && info["errorMessage"] != "An error occurred (InvalidParameterException) when calling the SearchFacesByImage operation: There are no faces in the image. Should be at least 1.") || (info["info"] == null)) {
+                      if((error_key in info && info["errorMessage"] != "An error occurred (InvalidParameterException) when calling the SearchFacesByImage operation: There are no faces in the image. Should be at least 1.") ) {} 
+                      else if (info["info"] == null) { 
+                          unidentified = unidentified + 1;
                       } else {
                           personData = info["info"]["response"]["docs"][0];
-                          asurite_id = personData["asuriteId"];
-                          name = personData["displayName"];
-                          emailAddress = personData["emailAddress"];
-                          profile_url = "https://isearch.asu.edu/profile/" + personData["eid"];
-                          new_set_of_people.push(asurite_id);
-                          li_tags.push('<li><a target="_blank" id="' + asurite_id + '" href="' + profile_url + '" title=" emailAddress :' + emailAddress + '">' + name + ' - ' + asurite_id + '</a></li>');
+                          if(personData === undefined) {
+                              unidentified = unidentified + 1;
+                          } else {   
+                              asurite_id = personData["asuriteId"];
+                              name = personData["displayName"];
+                              emailAddress = personData["emailAddress"];
+                              profile_url = "https://isearch.asu.edu/profile/" + personData["eid"];
+                              new_set_of_people.push(asurite_id);
+                              li_tags.push('<li><a target="_blank" id="' + asurite_id + '" href="' + profile_url + '" title=" emailAddress :' + emailAddress + '">' + name + ' - ' + asurite_id + '</a></li>');
+                          }
                       }
                           
                   }
@@ -123,6 +131,9 @@
                   for (var i in li_tags) {
                       li_tag = li_tags[i];
                       $('ol').append(li_tag); 
+                  }
+                  if(unidentified > 0) {
+                      $('ol').append('<li><a target="_blank" href="#"> UNIDENTIFIED : ' + unidentified + ' </a></li>');
                   }
                   /*
                   for(var i in data) {
