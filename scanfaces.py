@@ -36,10 +36,13 @@ def get_faces(base64_string):
     for (x, y, w, h) in faces:
         print('************** dimensions *************')
         print(x,y,w,h)
-        extra = 70
+        extra = 0
         roi_gray = gray[y - extra:y + h + extra, x - extra:x + w + extra]
         roi_color = img[y - extra:y + h + extra, x - extra:x + w + extra]
-
+        print(roi_gray)
+        #if roi_gray == []:
+        #    // ignoring that image segment
+        #    continue
         eyes = eye_cascade.detectMultiScale(roi_gray)
         if len(eyes) >= 1:
             face_images.append(roi_color)
